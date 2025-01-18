@@ -10,7 +10,7 @@ def splash_page():
     up_to_date = weather_data.get('timelines').get('minutely')[0]
     weather_values = up_to_date.get('values')
     temp = calculate_farenheit(weather_values.get('temperature'))
-    return render_template('index.html', temp=temp, rest=str(weather_values))
+    return render_template('index.html', temp=temp)
 
 
 with open('config.yml', 'r') as file:

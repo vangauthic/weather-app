@@ -4,9 +4,10 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='output.css') }}">
 </head>
 <body>
-    <h1 class="font-bold text-purple-400">
-        <p>{{ temp }}°F</p>
-        <p>{{ rest }}</p>
-    </h1>
+    <div class="max-w-40 mx-auto mt-10 bg-gray-300 bg-opacity-70 backdrop-blur p-8 rounded-lg shadow-lg">
+        <h1 class="text-3xl font-bold text-stone-900 text-center">
+            <p>{{ temp }}°F</p>
+        </h1>
+    </div>
 </body>
 </html>
