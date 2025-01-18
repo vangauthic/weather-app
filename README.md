@@ -1,4 +1,4 @@
 # USAGE
 
-Install dependencies:
-`pip install requirements.txt`
+Install dependencies:<br/>
+`pip install -r requirements.txt`
