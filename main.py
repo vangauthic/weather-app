@@ -30,8 +30,4 @@ def get_weather():
     return response.json()
 
 if __name__ == "__main__":
-    weather_data: dict = get_weather()
-    up_to_date = weather_data.get('timelines').get('minutely')[0]
-    weather_values = up_to_date.get('values')
-    temp = calculate_farenheit(weather_values.get('temperature'))
-    print(temp)
+    app.run()

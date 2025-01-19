@@ -1,10 +1,22 @@
+# FriscoNow
+
+A web-application displaying real-time weather information for Frisco, TX.
+
 # USAGE
 
-Install Dependencies:<br/>
-`pip install -r requirements.txt`<br/>
-`npm install`<br/>
-`npx tailwindcss -i static/styles.css -o static/output.css --watch`<br/>
+## Install Dependencies:<br/>
+```bash
+pip install -r requirements.txt
+npm install
+npx tailwindcss -i static/styles.css -o static/output.css --watch
+```
 
-Build & Deploy:<br/>
-MAC: `python3 -m flask --app main run`<br/>
-WINDOWS: `.\windows_start.bat`<br/>
+## Build & Deploy:<br/>
+MAC: <br/>
+```bash
+chmod +x mac_start.sh
+```
+WINDOWS:<br/> 
+```bash
+.\windows_start.bat
+```

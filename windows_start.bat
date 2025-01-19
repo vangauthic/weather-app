@@ -1,1 +1,1 @@
-python -m flask --app main run
+python main.py
