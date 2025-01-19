@@ -7,10 +7,13 @@ app = Flask(__name__)
 @app.route('/')
 def splash_page():
     weather_data: dict = get_weather()
+    hourly = weather_data.get('timelines').get('hourly')[0]
+    daily = weather_data.get('timelines').get('daily')[0]
     up_to_date = weather_data.get('timelines').get('minutely')[0]
     weather_values = up_to_date.get('values')
+    precip = weather_values.get('precipitationProbability')
     temp = calculate_farenheit(weather_values.get('temperature'))
-    return render_template('index.html', temp=temp)
+    return render_template('index.html', temp=temp, rest=str(hourly), rest2=str(daily), precip=precip)
 
 
 with open('config.yml', 'r') as file:

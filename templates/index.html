@@ -4,9 +4,27 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='output.css') }}">
 </head>
 <body style="background-image: url('../static/images/background.jpg')">
-    <div class="max-w-40 mx-auto mt-10 bg-gray-300 bg-opacity-40 backdrop-blur-16px p-8 rounded-lg shadow-lg">
-        <h1 class="text-3xl font-bold text-stone-900 text-center font-sfpro">
-            <p>{{ temp }}°F</p>
+    <div class="max-w-72 mx-auto mt-10 bg-opacity-0">
+        <h1 class="text-4xl text-slate-50 text-center font-sfprolight">
+            <p>Frisco, TX</p>
+        </h1>
+    </div>
+    <div class="max-w-72 mx-auto mt-10 bg-gray-300 bg-opacity-40 backdrop-blur-16px p-8 rounded-lg shadow-lg">
+        <h1 class="text-7xl text-slate-50 text-center font-sfpro">
+            <p>{{ temp }}°</p>
+        </h1>
+        <h2 class="text-l text-gray-300 text-center font-sfpro">
+            <p>{{ precip }}% chance of rain</p>
+        </h2>
+    </div>
+    <div class="max-w-400 mx-auto mt-10 bg-gray-300 bg-opacity-40 backdrop-blur-16px p-8 rounded-lg shadow-lg">
+        <h1 class="text-md text-stone-900 text-center font-sfpro">
+            <p>{{ rest }}</p>
+        </h1>
+    </div>
+    <div class="max-w-400 mx-auto mt-10 bg-gray-300 bg-opacity-40 backdrop-blur-16px p-8 rounded-lg shadow-lg">
+        <h1 class="text-md text-stone-900 text-center font-sfpro">
+            <p>{{ rest2 }}</p>
         </h1>
     </div>
 </body>
