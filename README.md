@@ -15,6 +15,7 @@ npx tailwindcss -i static/styles.css -o static/output.css --watch
 MAC: <br/>
 ```bash
 chmod +x mac_start.sh
+./mac_start.sh
 ```
 WINDOWS:<br/> 
 ```bash
