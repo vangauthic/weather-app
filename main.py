@@ -1,5 +1,6 @@
 import yaml
 import requests
+from datetime import datetime as DT
 from flask import Flask, render_template
 
 app = Flask(__name__)
@@ -13,7 +14,8 @@ def splash_page():
     weather_values = up_to_date.get('values')
     precip = weather_values.get('precipitationProbability')
     temp = calculate_farenheit(weather_values.get('temperature'))
-    return render_template('index.html', temp=temp, rest=str(hourly), rest2=str(daily), precip=precip)
+    time = DT.now().strftime("%I:%M %p")
+    return render_template('index.html', temp=temp, rest=str(hourly), rest2=str(daily), precip=precip, time=time)
 
 
 with open('config.yml', 'r') as file:
