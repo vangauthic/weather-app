@@ -619,9 +619,9 @@ video {
   color: rgb(209 213 219 / var(--tw-text-opacity, 1));
 }
 
-.text-slate-200 {
+.text-slate-100 {
   --tw-text-opacity: 1;
-  color: rgb(226 232 240 / var(--tw-text-opacity, 1));
+  color: rgb(241 245 249 / var(--tw-text-opacity, 1));
 }
 
 .text-slate-50 {
