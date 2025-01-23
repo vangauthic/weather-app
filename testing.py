@@ -1,10 +1,6 @@
-import yaml
-import requests
 import openmeteo_requests
 import requests_cache
 import pandas as pd
-from datetime import datetime as DT
-from flask import Flask, render_template
 from retry_requests import retry
 from geopy import geocoders
 
@@ -13,20 +9,11 @@ retry_session = retry(cache_session, retries = 5, backoff_factor = 0.2)
 openmeteo = openmeteo_requests.Client(session = retry_session)
 gn = geocoders.GeoNames(username="andrewp")
 
-app = Flask(__name__)
-
-@app.route('/')
-def splash_page():
-    temp = int(get_weather("Frisco, TX"))
-    time = DT.now().strftime("%I:%M %p")
-    return render_template('index.html', temp=temp, time=time)
-
 def get_coords(location: str):
     place, (lat, lng) = gn.geocode(location)
     return place, lat, lng
 
-def get_weather(location: str):
-    place, lat, lng = get_coords(location)
+def get_weather(lat: float, lng: float):
     url = "https://api.open-meteo.com/v1/forecast"
     params = {
         "latitude": lat,
@@ -41,7 +28,7 @@ def get_weather(location: str):
     responses = openmeteo.weather_api(url, params=params)
     response = responses[0]
     temp = response.Current().Variables(0).Value()
-    return temp
-
+    
 if __name__ == "__main__":
-    app.run()
+    place, lat, lng = get_coords("Frisco, TX")
+    get_weather(lat, lng)
