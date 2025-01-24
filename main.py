@@ -24,6 +24,19 @@ with open('config.yml', 'r') as file:
 WMO_CODES = data["WMO"]
 STATE_CODES = data["STATE_CODES"]
 
+def give_stats(weather_info: dict):
+    temp = int(weather_info.get("temp"))
+    wmo = (WMO_CODES[int(weather_info.get("wmo"))]).title()
+    lat = weather_info.get("lat")
+    lng = weather_info.get("lng")
+    location = geolocator.reverse((lat, lng))
+    city = location.raw["address"]["city"] + ", " + (STATE_CODES[location.raw["address"]["state"].upper()])
+
+    timezone_str = tf.timezone_at(lat=lat, lng=lng)
+    timezone = pytz.timezone(timezone_str)
+    time = DT.now(timezone).strftime("%I:%M %p")
+    return {"temp": temp, "wmo": wmo, "city": city, "time": time, "lat": lat, "lng": lng}
+
 @app.route('/', methods=['GET', 'POST'])
 def splash_page():
     city = "Frisco, TX"
@@ -35,19 +48,13 @@ def splash_page():
         weather_info = get_weather(city)
     except:
         weather_info = get_weather("Frisco, TX")
+    
+    try:
+        info = give_stats(weather_info)
+    except:
+        info = give_stats(get_weather("Frisco, TX"))
 
-    temp = int(weather_info.get("temp"))
-    wmo = (WMO_CODES[int(weather_info.get("wmo"))]).title()
-    lat = weather_info.get("lat")
-    lng = weather_info.get("lng")
-    location = geolocator.reverse((lat, lng))
-    city = location.raw["address"]["city"] + ", " + (STATE_CODES[location.raw["address"]["state"].upper()])
-
-    timezone_str = tf.timezone_at(lat=lat, lng=lng)
-    timezone = pytz.timezone(timezone_str)
-    time = DT.now(timezone).strftime("%I:%M %p")
-
-    return render_template('index.html', temp=temp, time=time, wmo=wmo, city=city)
+    return render_template('index.html', temp=info.get('temp'), time=info.get('time'), wmo=info.get('wmo'), city=info.get('city'))
 
 def get_coords(location: str):
     place, (lat, lng) = gn.geocode(location)
