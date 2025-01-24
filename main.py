@@ -1,10 +1,8 @@
 import yaml
-import requests
 import openmeteo_requests
 import requests_cache
-import pandas as pd
 from datetime import datetime as DT
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from retry_requests import retry
 from geopy import geocoders
 
@@ -15,11 +13,19 @@ gn = geocoders.GeoNames(username="andrewp")
 
 app = Flask(__name__) 
 
-@app.route('/')
+with open('config.yml', 'r') as file:
+    data = yaml.safe_load(file)
+
+WMO_CODES = data["WMO"]
+
+@app.route('/', methods=['GET', 'POST'])
 def splash_page():
-    weather_info = get_weather("Frisco, TX")
+    city = "Frisco, TX"
+    if request.method == 'POST':
+        city = request.form['city']
+    weather_info = get_weather(city)
     temp = int(weather_info.get("temp"))
-    wmo = weather_info.get("wmo")
+    wmo = (WMO_CODES[int(weather_info.get("wmo"))]).title()
     time = DT.now().strftime("%I:%M %p")
     return render_template('index.html', temp=temp, time=time, wmo=wmo)
 
@@ -44,10 +50,6 @@ def get_weather(location: str) -> dict:
     response = responses[0]
     temp = response.Current().Variables(0).Value()
     wmo = response.Current().Variables(8).Value()
-    i = 0
-    while i < 11:
-        print(f"{response.Current().Variables(i).Value()} : {str(response.Current().Variables(i))}")
-    print(wmo)
     return {"temp": temp, "wmo": wmo}
 
 if __name__ == "__main__":
