@@ -1,15 +1,18 @@
 import yaml
 import openmeteo_requests
 import requests_cache
+import pytz
 from datetime import datetime as DT
 from flask import Flask, render_template, request
 from retry_requests import retry
 from geopy import geocoders
+from timezonefinder import TimezoneFinder
 
 cache_session = requests_cache.CachedSession('.cache', expire_after = 3600)
 retry_session = retry(cache_session, retries = 5, backoff_factor = 0.2)
 openmeteo = openmeteo_requests.Client(session = retry_session)
 gn = geocoders.GeoNames(username="andrewp")
+tf = TimezoneFinder()
 
 app = Flask(__name__) 
 
@@ -23,11 +26,26 @@ def splash_page():
     city = "Frisco, TX"
     if request.method == 'POST':
         city = request.form['city']
-    weather_info = get_weather(city)
+    try:
+        weather_info = get_weather(city)
+    except:
+        weather_info = get_weather("Frisco, TX")
+
+    if "," not in city:
+        city = "Frisco, TX"
+
     temp = int(weather_info.get("temp"))
     wmo = (WMO_CODES[int(weather_info.get("wmo"))]).title()
-    time = DT.now().strftime("%I:%M %p")
-    return render_template('index.html', temp=temp, time=time, wmo=wmo)
+    city_name, state = city.split(", ")
+    city = f"{city_name.title()}, {state.upper()}"
+    lat = weather_info.get("lat")
+    lng = weather_info.get("lng")
+
+    timezone_str = tf.timezone_at(lat=lat, lng=lng)
+    timezone = pytz.timezone(timezone_str)
+    time = DT.now(timezone).strftime("%I:%M %p")
+
+    return render_template('index.html', temp=temp, time=time, wmo=wmo, city=city)
 
 def get_coords(location: str):
     place, (lat, lng) = gn.geocode(location)
@@ -50,7 +68,7 @@ def get_weather(location: str) -> dict:
     response = responses[0]
     temp = response.Current().Variables(0).Value()
     wmo = response.Current().Variables(8).Value()
-    return {"temp": temp, "wmo": wmo}
+    return {"temp": temp, "wmo": wmo, "lng": lng, "lat": lat}
 
 if __name__ == "__main__":
     app.run()

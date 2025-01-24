@@ -6,12 +6,12 @@
 <body style="background-image: url('../static/images/background.jpg')">
     <div class="max-w-72 mx-auto mt-10 bg-opacity-25"></div>
         <form method="POST" class="flex justify-center bg-opacity-0">
-            <input class="text-4xl text-slate-50 text-center font-sfprolight" type="text" id="city" name="city" required>
+            <input class="focus:outline-none focus:ring-0 text-1xl px-8 py-4 text-slate-200 text-center font-sfprolight bg-gray-300 bg-opacity-40 rounded-full shadow-lg" type="text" id="city" name="city" required>
         </form>
     </div>
     <div class="max-w-72 mx-auto mt-10 bg-opacity-0">
         <h1 class="text-4xl text-slate-50 text-center font-sfprolight">
-            <p>Frisco, TX</p>
+            <p>{{ city }}</p>
         </h1>
         <h2 class="text-l text-slate-100 text-center font-sfprolight">
             <p>{{ time }}</p>
@@ -21,7 +21,7 @@
         <h1 class="text-7xl text-slate-50 text-center font-sfpro">
             <p>{{ temp }}°</p>
         </h1>
-        <h2 class="text-l text-gray-300 text-center font-sfpro">
+        <h2 class="text-l text-slate-100 text-center font-sfpro">
             <p>{{ wmo }}</p>
         </h2>
     </div>
