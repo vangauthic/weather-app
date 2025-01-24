@@ -6,12 +6,14 @@ from datetime import datetime as DT
 from flask import Flask, render_template, request
 from retry_requests import retry
 from geopy import geocoders
+from geopy.geocoders import Nominatim
 from timezonefinder import TimezoneFinder
 
 cache_session = requests_cache.CachedSession('.cache', expire_after = 3600)
 retry_session = retry(cache_session, retries = 5, backoff_factor = 0.2)
 openmeteo = openmeteo_requests.Client(session = retry_session)
 gn = geocoders.GeoNames(username="andrewp")
+geolocator = Nominatim(user_agent="weather_app")
 tf = TimezoneFinder()
 
 app = Flask(__name__) 
@@ -20,26 +22,26 @@ with open('config.yml', 'r') as file:
     data = yaml.safe_load(file)
 
 WMO_CODES = data["WMO"]
+STATE_CODES = data["STATE_CODES"]
 
 @app.route('/', methods=['GET', 'POST'])
 def splash_page():
     city = "Frisco, TX"
     if request.method == 'POST':
         city = request.form['city']
+    if "," not in city:
+        city = "Frisco, TX"
     try:
         weather_info = get_weather(city)
     except:
         weather_info = get_weather("Frisco, TX")
 
-    if "," not in city:
-        city = "Frisco, TX"
-
     temp = int(weather_info.get("temp"))
     wmo = (WMO_CODES[int(weather_info.get("wmo"))]).title()
-    city_name, state = city.split(", ")
-    city = f"{city_name.title()}, {state.upper()}"
     lat = weather_info.get("lat")
     lng = weather_info.get("lng")
+    location = geolocator.reverse((lat, lng))
+    city = location.raw["address"]["city"] + ", " + (STATE_CODES[location.raw["address"]["state"].upper()])
 
     timezone_str = tf.timezone_at(lat=lat, lng=lng)
     timezone = pytz.timezone(timezone_str)
