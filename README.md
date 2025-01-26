@@ -4,6 +4,11 @@ A web-application displaying real-time weather information for Frisco, TX.
 
 # USAGE
 
+## Clone Repository:<br/>
+```bash
+git clone https://github.com/vangauthic/weather-app
+```
+
 ## Install Dependencies:<br/>
 ```bash
 pip install -r requirements.txt
