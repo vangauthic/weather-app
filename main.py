@@ -2,6 +2,7 @@ import yaml
 import openmeteo_requests
 import requests_cache
 import pytz
+import pandas as pd
 from datetime import datetime as DT
 from flask import Flask, render_template, request
 from retry_requests import retry
@@ -67,6 +68,7 @@ def get_weather(location: str) -> dict:
         "latitude": lat,
         "longitude": lng,
         "current": ["temperature_2m", "relative_humidity_2m", "apparent_temperature", "is_day", "precipitation", "rain", "showers", "snowfall", "weather_code", "cloud_cover", "wind_speed_10m", "wind_direction_10m", "wind_gusts_10m"],
+        "hourly": "precipitation_probability",
         "temperature_unit": "fahrenheit",
         "wind_speed_unit": "mph",
         "precipitation_unit": "inch",
@@ -77,6 +79,21 @@ def get_weather(location: str) -> dict:
     response = responses[0]
     temp = response.Current().Variables(0).Value()
     wmo = response.Current().Variables(8).Value()
+    hourly = response.Hourly()
+    hourly_precipitation_probability = hourly.Variables(0).ValuesAsNumpy()
+
+    hourly_data = {"date": pd.date_range(
+        start = pd.to_datetime(hourly.Time(), unit = "s", utc = True),
+        end = pd.to_datetime(hourly.TimeEnd(), unit = "s", utc = True),
+        freq = pd.Timedelta(seconds = hourly.Interval()),
+        inclusive = "left"
+    )}
+
+    hourly_data["precipitation_probability"] = hourly_precipitation_probability
+
+    hourly_dataframe = pd.DataFrame(data = hourly_data).to_dict()
+    for time, value in dict(hourly_dataframe.get('precipitation_probability')).items():
+        print(time, value)
     return {"temp": temp, "wmo": wmo, "lng": lng, "lat": lat}
 
 if __name__ == "__main__":
