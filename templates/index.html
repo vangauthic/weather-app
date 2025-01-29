@@ -4,11 +4,13 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='output.css') }}">
 </head>
 <body style="background-image: url('../static/images/background.jpg')">
+
     <div class="max-w-72 mx-auto mt-10 bg-opacity-25"></div>
         <form method="POST" class="flex justify-center bg-opacity-0">
             <input class="focus:outline-none focus:ring-0 text-1xl px-8 py-4 text-slate-200 text-center font-sfprolight bg-gray-300 bg-opacity-40 rounded-full shadow-lg" type="text" id="city" name="city" required>
         </form>
     </div>
+
     <div class="max-w-72 mx-auto mt-10 bg-opacity-0">
         <h1 class="text-4xl text-slate-50 text-center font-sfprolight">
             <p>{{ city }}</p>
@@ -17,6 +19,7 @@
             <p>{{ time }}</p>
         </h2>
     </div>
+
     <div class="max-w-72 mx-auto mt-10 bg-gray-300 bg-opacity-40 backdrop-blur-16px p-8 rounded-lg shadow-lg">
         <h1 class="text-7xl text-slate-50 text-center font-sfpro">
             <p>{{ temp }}°</p>
@@ -24,6 +27,21 @@
         <h2 class="text-l text-slate-100 text-center font-sfpro">
             <p>{{ wmo }}</p>
         </h2>
+    </div>
+
+    <div class="mx-auto mt-10 flex justify-center space-x-4">
+        <div class="w-64 h-64 bg-gray-300 bg-opacity-40 rounded-lg shadow-lg flex items-center justify-center">
+            <p class="text-slate-50 text-center font-sfpro">Box 1</p>
+        </div>
+        <div class="w-64 h-64 bg-gray-300 bg-opacity-40 rounded-lg shadow-lg flex items-center justify-center">
+            <p class="text-slate-50 text-center font-sfpro">Box 2</p>
+        </div>
+        <div class="w-64 h-64 bg-gray-300 bg-opacity-40 rounded-lg shadow-lg flex items-center justify-center">
+            <p class="text-slate-50 text-center font-sfpro">Box 3</p>
+        </div>
+        <div class="w-64 h-64 bg-gray-300 bg-opacity-40 rounded-lg shadow-lg flex items-center justify-center">
+            <p class="text-slate-50 text-center font-sfpro">Box 4</p>
+        </div>
     </div>
 </body>
 </html>
