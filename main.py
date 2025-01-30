@@ -55,7 +55,28 @@ def splash_page():
     except:
         info = give_stats(get_weather("Frisco, TX"))
 
-    return render_template('index.html', temp=info.get('temp'), time=info.get('time'), wmo=info.get('wmo'), city=info.get('city'))
+    next_12_temp = weather_info.get("next_12_temp")
+    print(next_12_temp)
+
+    return render_template(
+        'index.html',
+        temp=info.get('temp'),
+        time=info.get('time'),
+        wmo=info.get('wmo'),
+        city=info.get('city'),
+        tt1=next_12_temp[0],
+        tt2=next_12_temp[1],
+        tt3=next_12_temp[2],
+        tt4=next_12_temp[3],
+        tt5=next_12_temp[4],
+        tt6=next_12_temp[5],
+        tt7=next_12_temp[6],
+        tt8=next_12_temp[7],
+        tt9=next_12_temp[8],
+        tt10=next_12_temp[9],
+        tt11=next_12_temp[10],
+        tt12=next_12_temp[11]
+    )
 
 def get_coords(location: str):
     place, (lat, lng) = gn.geocode(location)
@@ -68,7 +89,7 @@ def get_weather(location: str) -> dict:
         "latitude": lat,
         "longitude": lng,
         "current": ["temperature_2m", "relative_humidity_2m", "apparent_temperature", "is_day", "precipitation", "rain", "showers", "snowfall", "weather_code", "cloud_cover", "wind_speed_10m", "wind_direction_10m", "wind_gusts_10m"],
-        "hourly": "precipitation_probability",
+        "hourly": ["temperature_2m", "precipitation_probability"],
         "temperature_unit": "fahrenheit",
         "wind_speed_unit": "mph",
         "precipitation_unit": "inch",
@@ -80,7 +101,8 @@ def get_weather(location: str) -> dict:
     temp = response.Current().Variables(0).Value()
     wmo = response.Current().Variables(8).Value()
     hourly = response.Hourly()
-    hourly_precipitation_probability = hourly.Variables(0).ValuesAsNumpy()
+    hourly_temperature_2m = hourly.Variables(0).ValuesAsNumpy()
+    hourly_precipitation_probability = hourly.Variables(1).ValuesAsNumpy()
 
     hourly_data = {"date": pd.date_range(
         start = pd.to_datetime(hourly.Time(), unit = "s", utc = True),
@@ -89,12 +111,29 @@ def get_weather(location: str) -> dict:
         inclusive = "left"
     )}
 
+    hourly_data["temperature_2m"] = hourly_temperature_2m
     hourly_data["precipitation_probability"] = hourly_precipitation_probability
+    
+    hourly_df = pd.DataFrame(data = hourly_data)
+    timezone_str = tf.timezone_at(lat=lat, lng=lng)
+    hourly_df['date'] = hourly_df['date'].dt.tz_convert(timezone_str)
+    
+    next_12_hours = hourly_df.head(12).to_dict('records')
+    next_12_hour_temp = []
+    next_12_hour_precip = []
+    for dict in next_12_hours:
+        next_12_hour_temp.append(int(dict["temperature_2m"]))
+        next_12_hour_precip.append(int(dict["precipitation_probability"]))
 
-    hourly_dataframe = pd.DataFrame(data = hourly_data).to_dict()
-    for time, value in dict(hourly_dataframe.get('precipitation_probability')).items():
-        print(time, value)
-    return {"temp": temp, "wmo": wmo, "lng": lng, "lat": lat}
+    print(next_12_hour_temp, next_12_hour_precip)
+    return {
+        "temp": temp,
+        "wmo": wmo,
+        "lng": lng,
+        "lat": lat,
+        "next_12_temp": next_12_hour_temp,
+        "next_12_precip": next_12_hour_precip
+    }
 
 if __name__ == "__main__":
     app.run()
