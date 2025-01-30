@@ -121,18 +121,21 @@ def get_weather(location: str) -> dict:
     next_12_hours = hourly_df.head(12).to_dict('records')
     next_12_hour_temp = []
     next_12_hour_precip = []
+    next_12_hour_time = []
     for dict in next_12_hours:
         next_12_hour_temp.append(int(dict["temperature_2m"]))
         next_12_hour_precip.append(int(dict["precipitation_probability"]))
+        next_12_hour_time.append(dict["date"].strftime("%I:%M %p"))
 
-    print(next_12_hour_temp, next_12_hour_precip)
+    print(next_12_hour_temp, next_12_hour_precip, next_12_hour_time)
     return {
         "temp": temp,
         "wmo": wmo,
         "lng": lng,
         "lat": lat,
         "next_12_temp": next_12_hour_temp,
-        "next_12_precip": next_12_hour_precip
+        "next_12_precip": next_12_hour_precip,
+        "next_12_time": next_12_hour_time
     }
 
 if __name__ == "__main__":
