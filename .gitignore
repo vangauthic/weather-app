@@ -1,7 +1,5 @@
 __pycache__*
 *.pyc
-package-lock.json
-package.json
 node_modules/
 config.yml
 .cache.sqlite
