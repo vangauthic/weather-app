@@ -58,24 +58,29 @@ def splash_page():
     next_12_temp = weather_info.get("next_12_temp")
     print(next_12_temp)
 
+    var_data = {
+        "temp": info.get('temp'),
+        "wmo": info.get('wmo'),
+        "city": info.get('city'),
+        "time": info.get('time'),
+        "tt1": next_12_temp[0],
+        "tt2": next_12_temp[1],
+        "tt3": next_12_temp[2],
+        "tt4": next_12_temp[3],
+        "tt5": next_12_temp[4],
+        "tt6": next_12_temp[5],
+        "tt7": next_12_temp[6],
+        "tt8": next_12_temp[7],
+        "tt9": next_12_temp[8],
+        "tt10": next_12_temp[9],
+        "tt11": next_12_temp[10],
+        "tt12": next_12_temp[11]
+
+    }
+
     return render_template(
         'index.html',
-        temp=info.get('temp'),
-        time=info.get('time'),
-        wmo=info.get('wmo'),
-        city=info.get('city'),
-        tt1=next_12_temp[0],
-        tt2=next_12_temp[1],
-        tt3=next_12_temp[2],
-        tt4=next_12_temp[3],
-        tt5=next_12_temp[4],
-        tt6=next_12_temp[5],
-        tt7=next_12_temp[6],
-        tt8=next_12_temp[7],
-        tt9=next_12_temp[8],
-        tt10=next_12_temp[9],
-        tt11=next_12_temp[10],
-        tt12=next_12_temp[11]
+        data=var_data,
     )
 
 def get_coords(location: str):

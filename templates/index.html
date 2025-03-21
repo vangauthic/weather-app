@@ -12,59 +12,26 @@
 
     <div class="max-w-72 mx-auto mt-10 bg-opacity-0">
         <h1 class="text-4xl text-slate-50 text-center font-sfprolight">
-            <p>{{ city }}</p>
+            <p>{{ data['city'] }}</p>
         </h1>
         <h2 class="text-l text-slate-100 text-center font-sfprolight">
-            <p>{{ time }}</p>
+            <p>{{ data['time'] }}</p>
         </h2>
     </div>
 
     <div class="max-w-72 mx-auto mt-10 bg-gray-300 bg-opacity-40 backdrop-blur-16px p-8 rounded-lg shadow-lg">
         <h1 class="text-7xl text-slate-50 text-center font-sfpro">
-            <p>{{ temp }}°</p>
+            <p>{{ data['temp'] }}°</p>
         </h1>
         <h2 class="text-l text-slate-100 text-center font-sfpro">
-            <p>{{ wmo }}</p>
+            <p>{{ data['wmo'] }}</p>
         </h2>
     </div>
 
-    <div class="mx-auto mt-10 flex justify-center space-x-4">
-        <div class="w-24 h-24 bg-gray-300 bg-opacity-40 rounded-lg shadow-lg flex items-center justify-center">
-            <p class="text-slate-50 text-center font-sfpro">{{ tt1 }}</p>
-        </div>
-        <div class="w-24 h-24 bg-gray-300 bg-opacity-40 rounded-lg shadow-lg flex items-center justify-center">
-            <p class="text-slate-50 text-center font-sfpro">{{ tt2 }}</p>
-        </div>
-        <div class="w-24 h-24 bg-gray-300 bg-opacity-40 rounded-lg shadow-lg flex items-center justify-center">
-            <p class="text-slate-50 text-center font-sfpro">{{ tt3 }}</p>
-        </div>
-        <div class="w-24 h-24 bg-gray-300 bg-opacity-40 rounded-lg shadow-lg flex items-center justify-center">
-            <p class="text-slate-50 text-center font-sfpro">{{ tt4 }}</p>
-        </div>
-        <div class="w-24 h-24 bg-gray-300 bg-opacity-40 rounded-lg shadow-lg flex items-center justify-center">
-            <p class="text-slate-50 text-center font-sfpro">{{ tt5 }}</p>
-        </div>
-        <div class="w-24 h-24 bg-gray-300 bg-opacity-40 rounded-lg shadow-lg flex items-center justify-center">
-            <p class="text-slate-50 text-center font-sfpro">{{ tt6 }}</p>
-        </div>
-        <div class="w-24 h-24 bg-gray-300 bg-opacity-40 rounded-lg shadow-lg flex items-center justify-center">
-            <p class="text-slate-50 text-center font-sfpro">{{ tt7 }}</p>
-        </div>
-        <div class="w-24 h-24 bg-gray-300 bg-opacity-40 rounded-lg shadow-lg flex items-center justify-center">
-            <p class="text-slate-50 text-center font-sfpro">{{ tt8 }}</p>
-        </div>
-        <div class="w-24 h-24 bg-gray-300 bg-opacity-40 rounded-lg shadow-lg flex items-center justify-center">
-            <p class="text-slate-50 text-center font-sfpro">{{ tt9 }}</p>
-        </div>
-        <div class="w-24 h-24 bg-gray-300 bg-opacity-40 rounded-lg shadow-lg flex items-center justify-center">
-            <p class="text-slate-50 text-center font-sfpro">{{ tt10 }}</p>
-        </div>
-        <div class="w-24 h-24 bg-gray-300 bg-opacity-40 rounded-lg shadow-lg flex items-center justify-center">
-            <p class="text-slate-50 text-center font-sfpro">{{ tt11 }}</p>
-        </div>
-        <div class="w-24 h-24 bg-gray-300 bg-opacity-40 rounded-lg shadow-lg flex items-center justify-center">
-            <p class="text-slate-50 text-center font-sfpro">{{ tt12 }}</p>
-        </div>
+    <div class="max-w-72 mx-auto mt-10 bg-gray-300 bg-opacity-40 backdrop-blur-16px p-8 rounded-lg shadow-lg">
+        <h1 class="text-7xl text-slate-50 text-center font-sfpro">
+            <p>{{ data['temp'] }}°</p>
+        </h1>
     </div>
 </body>
 </html>
