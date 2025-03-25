@@ -62,19 +62,7 @@ def splash_page():
         "temp": info.get('temp'),
         "wmo": info.get('wmo'),
         "city": info.get('city'),
-        "time": info.get('time'),
-        "tt1": next_12_temp[0],
-        "tt2": next_12_temp[1],
-        "tt3": next_12_temp[2],
-        "tt4": next_12_temp[3],
-        "tt5": next_12_temp[4],
-        "tt6": next_12_temp[5],
-        "tt7": next_12_temp[6],
-        "tt8": next_12_temp[7],
-        "tt9": next_12_temp[8],
-        "tt10": next_12_temp[9],
-        "tt11": next_12_temp[10],
-        "tt12": next_12_temp[11]
+        "time": info.get('time')
 
     }
 
@@ -123,7 +111,10 @@ def get_weather(location: str) -> dict:
     timezone_str = tf.timezone_at(lat=lat, lng=lng)
     hourly_df['date'] = hourly_df['date'].dt.tz_convert(timezone_str)
     
+    now_local = pd.Timestamp.now(tz=timezone_str)
+    hourly_df = hourly_df[hourly_df['date'] >= now_local]
     next_12_hours = hourly_df.head(12).to_dict('records')
+    
     next_12_hour_temp = []
     next_12_hour_precip = []
     next_12_hour_time = []
