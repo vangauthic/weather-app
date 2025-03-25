@@ -13,7 +13,7 @@ git clone https://github.com/vangauthic/weather-app
 ```bash
 pip install -r requirements.txt
 npm install
-npx tailwindcss -i static/styles.css -o static/output.css --watch
+npm run watch
 ```
 
 ## Build & Deploy:<br/>
