@@ -24,10 +24,13 @@ with open('config.yml', 'r') as file:
 
 WMO_CODES = data["WMO"]
 STATE_CODES = data["STATE_CODES"]
+ICONS = data["ICONS"]
 
 def give_stats(weather_info: dict):
     temp = int(weather_info.get("temp"))
-    wmo = (WMO_CODES[int(weather_info.get("wmo"))]).title()
+    wmo_code = int(weather_info.get("wmo"))
+    wmo = WMO_CODES[wmo_code].title()
+    icon = ICONS[wmo_code]
     lat = weather_info.get("lat")
     lng = weather_info.get("lng")
     location = geolocator.reverse((lat, lng))
@@ -36,7 +39,16 @@ def give_stats(weather_info: dict):
     timezone_str = tf.timezone_at(lat=lat, lng=lng)
     timezone = pytz.timezone(timezone_str)
     time = DT.now(timezone).strftime("%I:%M %p")
-    return {"temp": temp, "wmo": wmo, "city": city, "time": time, "lat": lat, "lng": lng}
+    
+    return {
+        "temp": temp,
+        "wmo": wmo,
+        "city": city,
+        "time": time,
+        "lat": lat,
+        "lng": lng,
+        "icon": icon
+    }
 
 @app.route('/', methods=['GET', 'POST'])
 def splash_page():
@@ -59,12 +71,15 @@ def splash_page():
     next_12_time = weather_info.get("next_12_time")
     print("XXX")
     print(next_12_temp, next_12_time)
+    main_icon = info.get('icon')
+    print(main_icon)
 
     var_data = {
         "temp": info.get('temp'),
         "wmo": info.get('wmo'),
         "city": info.get('city'),
         "time": info.get('time'),
+        "main_icon": str(main_icon),
     }
 
     return render_template(

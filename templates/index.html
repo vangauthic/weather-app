@@ -2,6 +2,7 @@
 <html>
 <head>
     <link rel="stylesheet" href="{{ url_for('static', filename='output.css') }}">
+    <script src="https://unpkg.com/@lucide/web@latest"></script>
 </head>
 <body style="background-image: url('../static/images/background.jpg')">
     <div class="max-w-72 mx-auto mt-10 bg-opacity-25"></div>
@@ -20,11 +21,14 @@
     </div>
 
     <div class="max-w-72 mx-auto mt-10 bg-gray-300 bg-opacity-40 backdrop-blur-16px p-8 rounded-lg shadow-lg">
-        <h1 class="text-7xl text-slate-50 text-center font-sfpro">
-            <p>{{ data['temp'] }}°</p>
+        <h1 class="text-center font-sfpro">
+            <p class="text-7xl text-slate-50">{{ data['temp'] }}°</p>
         </h1>
-        <h2 class="text-l text-slate-100 text-center font-sfpro">
-            <p>{{ data['wmo'] }}</p>
+        <h2 class="text-center font-sfpro">
+            <p class="text-l text-slate-100 flex items-center justify-center gap-2">
+                {{ data['wmo'] }}
+                <i data-lucide="{{ data['icon'] }}" class="w-6 h-6"></i>
+            </p>
         </h2>
     </div>
 
@@ -50,5 +54,10 @@
             </p>
         </h2>
     </div>
+
+    <script>
+        console.log("Icon name:", "{{ data['icon'] }}");
+        lucide.createIcons();
+    </script>
 </body>
 </html>
