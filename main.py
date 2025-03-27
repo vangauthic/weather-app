@@ -56,19 +56,22 @@ def splash_page():
         info = give_stats(get_weather("Frisco, TX"))
 
     next_12_temp = weather_info.get("next_12_temp")
-    print(next_12_temp)
+    next_12_time = weather_info.get("next_12_time")
+    print("XXX")
+    print(next_12_temp, next_12_time)
 
     var_data = {
         "temp": info.get('temp'),
         "wmo": info.get('wmo'),
         "city": info.get('city'),
-        "time": info.get('time')
-
+        "time": info.get('time'),
     }
 
     return render_template(
         'index.html',
         data=var_data,
+        next_12_time=next_12_time,
+        next_12_temp=next_12_temp,
     )
 
 def get_coords(location: str):
