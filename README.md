@@ -4,7 +4,7 @@ A web-application displaying real-time weather information for any requested cit
 
 ## Authors
 
-Andrew Petty
+Andrew Petty<br/>
 Jatin Kumar
 
 # USAGE
