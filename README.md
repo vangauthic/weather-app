@@ -1,6 +1,11 @@
-# FriscoNow
+# WeatherNow
 
-A web-application displaying real-time weather information for Frisco, TX.
+A web-application displaying real-time weather information for any requested city in America created for CSCE 1010 at UNT.
+
+## Authors
+
+Andrew Petty
+Jatin Kumar
 
 # USAGE
 
@@ -25,4 +30,11 @@ chmod +x mac_start.sh
 WINDOWS:<br/> 
 ```bash
 .\windows_start.bat
+```
+EXTRA:<br/>
+```bash
+python main.py
+```
+```bash
+python3 main.py
 ```
