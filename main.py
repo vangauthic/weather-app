@@ -69,10 +69,7 @@ def splash_page():
 
     next_12_temp = weather_info.get("next_12_temp")
     next_12_time = weather_info.get("next_12_time")
-    print("XXX")
-    print(next_12_temp, next_12_time)
     main_icon = info.get('icon')
-    print(main_icon)
 
     var_data = {
         "temp": info.get('temp'),
@@ -105,7 +102,7 @@ def get_weather(location: str) -> dict:
         "wind_speed_unit": "mph",
         "precipitation_unit": "inch",
         "timeformat": "unixtime",
-        "forecast_days": 1
+        "forecast_days": 2
     }
     responses = openmeteo.weather_api(url, params=params)
     response = responses[0]
@@ -141,7 +138,6 @@ def get_weather(location: str) -> dict:
         next_12_hour_precip.append(int(dict["precipitation_probability"]))
         next_12_hour_time.append(dict["date"].strftime("%I:%M %p"))
 
-    print(next_12_hour_temp, next_12_hour_precip, next_12_hour_time)
     return {
         "temp": temp,
         "wmo": wmo,
