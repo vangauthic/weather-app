@@ -10,6 +10,7 @@ from geopy import geocoders
 from geopy.geocoders import Nominatim
 from timezonefinder import TimezoneFinder
 
+#Connect to Open Meteo API, GeoNames, GeoLocator, and TimezoneFinder
 cache_session = requests_cache.CachedSession('.cache', expire_after = 3600)
 retry_session = retry(cache_session, retries = 5, backoff_factor = 0.2)
 openmeteo = openmeteo_requests.Client(session = retry_session)
@@ -19,6 +20,7 @@ tf = TimezoneFinder()
 
 app = Flask(__name__) 
 
+#Open config and load data
 with open('config.yml', 'r') as file:
     data = yaml.safe_load(file)
 
@@ -26,6 +28,7 @@ WMO_CODES = data["WMO"]
 STATE_CODES = data["STATE_CODES"]
 ICONS = data["ICONS"]
 
+#Returns a cleaned version of weather statistics ready to display in Flask template
 def give_stats(weather_info: dict):
     temp = int(weather_info.get("temp"))
     wmo_code = int(weather_info.get("wmo"))
@@ -54,8 +57,10 @@ def give_stats(weather_info: dict):
         "humidity": humidity,
     }
 
+#Render splash page
 @app.route('/', methods=['GET', 'POST'])
 def splash_page():
+    #Default to Frisco, TX if no city is provided
     city = "Frisco, TX"
     if request.method == 'POST':
         city = request.form['city']
@@ -63,18 +68,19 @@ def splash_page():
         city = "Frisco, TX"
     try:
         weather_info = get_weather(city)
-    except:
+    except: #Default to Frisco, TX if city is invalid
         weather_info = get_weather("Frisco, TX")
     
     try:
         info = give_stats(weather_info)
-    except:
+    except: #Default to Frisco, TX if city is invalid
         info = give_stats(get_weather("Frisco, TX"))
 
     next_12_temp = weather_info.get("next_12_temp")
     next_12_time = weather_info.get("next_12_time")
     main_icon = info.get('icon')
 
+    #Load variables for easy unpacking in HTML template
     var_data = {
         "temp": info.get('temp'),
         "wmo": info.get('wmo'),
@@ -92,12 +98,13 @@ def splash_page():
         next_12_temp=next_12_temp,
     )
 
+#Use GeoCode to get coordinates
 def get_coords(location: str):
     place, (lat, lng) = gn.geocode(location)
     return place, lat, lng
 
 def get_weather(location: str) -> dict:
-    place, lat, lng = get_coords(location)
+    place, lat, lng = get_coords(location) #Use coordinates to get weather data from Open Meteo API
     url = "https://api.open-meteo.com/v1/forecast"
     params = {
         "latitude": lat,
@@ -110,6 +117,7 @@ def get_weather(location: str) -> dict:
         "timeformat": "unixtime",
         "forecast_days": 2
     }
+    #Define variables from Open Meteo response
     responses = openmeteo.weather_api(url, params=params)
     response = responses[0]
     temp = response.Current().Variables(0).Value()
@@ -120,6 +128,7 @@ def get_weather(location: str) -> dict:
     hourly_temperature_2m = hourly.Variables(0).ValuesAsNumpy()
     hourly_precipitation_probability = hourly.Variables(1).ValuesAsNumpy()
 
+    #Unpack hourly data using pandas
     hourly_data = {"date": pd.date_range(
         start = pd.to_datetime(hourly.Time(), unit = "s", utc = True),
         end = pd.to_datetime(hourly.TimeEnd(), unit = "s", utc = True),
@@ -141,7 +150,7 @@ def get_weather(location: str) -> dict:
     next_12_hour_temp = []
     next_12_hour_precip = []
     next_12_hour_time = []
-    for dict in next_12_hours:
+    for dict in next_12_hours: #Turn unpacked hourly data into easy to use lists
         next_12_hour_temp.append(int(dict["temperature_2m"]))
         next_12_hour_precip.append(int(dict["precipitation_probability"]))
         next_12_hour_time.append(dict["date"].strftime("%I:%M %p"))
