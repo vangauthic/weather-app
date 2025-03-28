@@ -24,12 +24,12 @@
     <div class="flex justify-center items-start space-x-8 mx-auto mt-10">
         <div class="w-72 bg-gray-300 bg-opacity-40 backdrop-blur-16px p-8 rounded-lg shadow-lg">
             <h1 class="text-center font-sfpro pb-2">
-                <p class="text-7xl text-slate-50">{{ data['temp'] }}°</p>
+                <p class="text-7xl text-slate-50">{{ data['humidity'] }}%</p>
             </h1>
             <h2 class="text-center font-sfpro">
                 <p class="text-l text-slate-100 flex items-center justify-center gap-2">
-                    {{ data['wmo'] }}
-                    <i data-lucide="{{ data['main_icon'] }}" class="w-6 h-6"></i>
+                    Humidity
+                    <i data-lucide="droplet" class="w-6 h-6"></i>
                 </p>
             </h2>
         </div>

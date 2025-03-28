@@ -34,6 +34,7 @@ def give_stats(weather_info: dict):
     lat = weather_info.get("lat")
     lng = weather_info.get("lng")
     wind_speed = int(weather_info.get("wind_speed"))
+    humidity = int(weather_info.get("humidity"))
     location = geolocator.reverse((lat, lng))
     city = location.raw["address"]["city"] + ", " + (STATE_CODES[location.raw["address"]["state"].upper()])
 
@@ -50,6 +51,7 @@ def give_stats(weather_info: dict):
         "lng": lng,
         "icon": icon,
         "wind_speed": wind_speed,
+        "humidity": humidity,
     }
 
 @app.route('/', methods=['GET', 'POST'])
@@ -80,6 +82,7 @@ def splash_page():
         "time": info.get('time'),
         "main_icon": str(main_icon),
         "wind_speed": info.get('wind_speed'),
+        "humidity": info.get('humidity'),
     }
 
     return render_template(
@@ -110,6 +113,7 @@ def get_weather(location: str) -> dict:
     responses = openmeteo.weather_api(url, params=params)
     response = responses[0]
     temp = response.Current().Variables(0).Value()
+    humidity = response.Current().Variables(1).Value()
     wmo = response.Current().Variables(8).Value()
     wind_speed = response.Current().Variables(10).Value()
     hourly = response.Hourly()
@@ -151,6 +155,7 @@ def get_weather(location: str) -> dict:
         "next_12_precip": next_12_hour_precip,
         "next_12_time": next_12_hour_time,
         "wind_speed": wind_speed,
+        "humidity": humidity,
     }
 
 if __name__ == "__main__":
