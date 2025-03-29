@@ -583,12 +583,16 @@ video {
   width: 18rem;
 }
 
+.min-w-\[100px\] {
+  min-width: 100px;
+}
+
 .max-w-72 {
   max-width: 18rem;
 }
 
-.max-w-96 {
-  max-width: 24rem;
+.max-w-xl {
+  max-width: 36rem;
 }
 
 .items-start {
@@ -609,6 +613,10 @@ video {
 
 .gap-2 {
   gap: 0.5rem;
+}
+
+.gap-4 {
+  gap: 1rem;
 }
 
 .space-x-8 > :not([hidden]) ~ :not([hidden]) {
@@ -646,6 +654,11 @@ video {
   padding: 2rem;
 }
 
+.px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
 .px-8 {
   padding-left: 2rem;
   padding-right: 2rem;
@@ -664,16 +677,12 @@ video {
   padding-bottom: 1rem;
 }
 
-.text-left {
-  text-align: left;
+.pb-8 {
+  padding-bottom: 2rem;
 }
 
 .text-center {
   text-align: center;
-}
-
-.text-right {
-  text-align: right;
 }
 
 .font-sfpro {

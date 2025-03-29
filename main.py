@@ -78,6 +78,11 @@ def splash_page():
 
     next_12_temp = weather_info.get("next_12_temp")
     next_12_time = weather_info.get("next_12_time")
+    next_12_icons = weather_info.get("next_12_icons")
+    next_12_phrase = weather_info.get("next_12_phrase")
+    next_12_visibility = weather_info.get("next_12_visibility")
+    next_12_precip = weather_info.get("next_12_precip")
+    next_12_wmo = weather_info.get("next_12_wmo")
     main_icon = info.get('icon')
 
     #Load variables for easy unpacking in HTML template
@@ -96,6 +101,8 @@ def splash_page():
         data=var_data,
         next_12_time=next_12_time,
         next_12_temp=next_12_temp,
+        next_12_icons = next_12_icons,
+        next_12_phrase = next_12_phrase,
     )
 
 #Use GeoCode to get coordinates
@@ -110,7 +117,7 @@ def get_weather(location: str) -> dict:
         "latitude": lat,
         "longitude": lng,
         "current": ["temperature_2m", "relative_humidity_2m", "apparent_temperature", "is_day", "precipitation", "rain", "showers", "snowfall", "weather_code", "cloud_cover", "wind_speed_10m", "wind_direction_10m", "wind_gusts_10m"],
-        "hourly": ["temperature_2m", "precipitation_probability"],
+        "hourly": ["temperature_2m", "precipitation_probability", "weather_code", "visibility"],
         "temperature_unit": "fahrenheit",
         "wind_speed_unit": "mph",
         "precipitation_unit": "inch",
@@ -124,9 +131,12 @@ def get_weather(location: str) -> dict:
     humidity = response.Current().Variables(1).Value()
     wmo = response.Current().Variables(8).Value()
     wind_speed = response.Current().Variables(10).Value()
+
     hourly = response.Hourly()
     hourly_temperature_2m = hourly.Variables(0).ValuesAsNumpy()
     hourly_precipitation_probability = hourly.Variables(1).ValuesAsNumpy()
+    hourly_wmo = hourly.Variables(2).ValuesAsNumpy()
+    hourly_visibility = hourly.Variables(3).ValuesAsNumpy()
 
     #Unpack hourly data using pandas
     hourly_data = {"date": pd.date_range(
@@ -138,6 +148,8 @@ def get_weather(location: str) -> dict:
 
     hourly_data["temperature_2m"] = hourly_temperature_2m
     hourly_data["precipitation_probability"] = hourly_precipitation_probability
+    hourly_data["weather_code"] = hourly_wmo
+    hourly_data["visibility"] = hourly_visibility
     
     hourly_df = pd.DataFrame(data = hourly_data)
     timezone_str = tf.timezone_at(lat=lat, lng=lng)
@@ -150,10 +162,18 @@ def get_weather(location: str) -> dict:
     next_12_hour_temp = []
     next_12_hour_precip = []
     next_12_hour_time = []
+    next_12_hour_wmo = []
+    next_12_hour_visibility = []
+    next_12_icons = []
+    next_12_phrase = []
     for dict in next_12_hours: #Turn unpacked hourly data into easy to use lists
         next_12_hour_temp.append(int(dict["temperature_2m"]))
         next_12_hour_precip.append(int(dict["precipitation_probability"]))
         next_12_hour_time.append(dict["date"].strftime("%I:%M %p"))
+        next_12_hour_wmo.append(int(dict["weather_code"]))
+        next_12_hour_visibility.append(int(dict["visibility"]))
+        next_12_icons.append(ICONS[int(dict["weather_code"])] if int(dict["weather_code"]) in ICONS else "cloud")
+        next_12_phrase.append(WMO_CODES[int(dict["weather_code"])] if int(dict["weather_code"]) in WMO_CODES else "Cloudy")
 
     return {
         "temp": temp,
@@ -163,6 +183,10 @@ def get_weather(location: str) -> dict:
         "next_12_temp": next_12_hour_temp,
         "next_12_precip": next_12_hour_precip,
         "next_12_time": next_12_hour_time,
+        "next_12_wmo": next_12_hour_wmo,
+        "next_12_visibility": next_12_hour_visibility,
+        "next_12_icons": next_12_icons,
+        "next_12_phrase": next_12_phrase,
         "wind_speed": wind_speed,
         "humidity": humidity,
     }

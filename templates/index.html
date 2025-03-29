@@ -62,27 +62,19 @@
         </div>
     </div>
 
-    <div class="max-w-96 mx-auto mt-10 bg-gray-300 bg-opacity-40 backdrop-blur-16px p-8 rounded-lg shadow-lg">
-        <h2 class="text-l text-slate-100 font-sfpro pb-4">
-            <p class="flex justify-between items-center">
-                <span class="text-left font-sfprolight">{{ next_12_time[0] }}</span>
-                <span class="text-right text-xl">{{ next_12_temp[0] }}°</span>
-            </p>
-        </h2>
-
-        <h2 class="text-l text-slate-100 font-sfpro pb-4">
-            <p class="flex justify-between items-center">
-                <span class="text-left font-sfprolight">{{ next_12_time[1] }}</span>
-                <span class="text-right text-xl">{{ next_12_temp[1] }}°</span>
-            </p>
-        </h2>
-
-        <h2 class="text-l text-slate-100 font-sfpro">
-            <p class="flex justify-between items-center">
-                <span class="text-left font-sfprolight">{{ next_12_time[2] }}</span>
-                <span class="text-right text-xl">{{ next_12_temp[2] }}°</span>
-            </p>
-        </h2>
+    <div class="max-w-xl mx-auto mt-10 bg-gray-300 bg-opacity-40 backdrop-blur-16px p-8 rounded-lg shadow-lg">
+        {% for i in range(6) %}
+            <h2 class="text-l text-slate-100 font-sfpro {% if not loop.last %}pb-4{% endif %}">
+                <div class="flex justify-between items-center px-4">
+                    <span class="font-sfprolight">{{ next_12_time[i] }}</span>
+                    <div class="flex items-center gap-4">
+                        <span class="text-xl">{{ next_12_temp[i] }}°</span>
+                        <i data-lucide="{{ next_12_icons[i] }}" class="w-6 h-6"></i>
+                        <span class="text-l min-w-[100px]">{{ next_12_phrase[i] }}</span>
+                    </div>
+                </div>
+            </h2>
+        {% endfor %}
     </div>
 
     <script>
