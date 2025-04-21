@@ -151,14 +151,15 @@ def get_weather(location: str) -> dict:
     hourly_data["weather_code"] = hourly_wmo
     hourly_data["visibility"] = hourly_visibility
     
-    hourly_df = pd.DataFrame(data = hourly_data)
-    timezone_str = tf.timezone_at(lat=lat, lng=lng)
-    hourly_df['date'] = hourly_df['date'].dt.tz_convert(timezone_str)
+    hourly_df = pd.DataFrame(data = hourly_data) #Create a pandas DF from hourly data
+    timezone_str = tf.timezone_at(lat=lat, lng=lng) # Defines where the timezone is, gathered from coordinates
+    hourly_df['date'] = hourly_df['date'].dt.tz_convert(timezone_str) #This guarantees that the time is for the next 12 hours in the correct time zone
     
     now_local = pd.Timestamp.now(tz=timezone_str)
     hourly_df = hourly_df[hourly_df['date'] >= now_local]
     next_12_hours = hourly_df.head(12).to_dict('records')
     
+    #Pre-define all hourly variables for easy packing
     next_12_hour_temp = []
     next_12_hour_precip = []
     next_12_hour_time = []
@@ -166,7 +167,7 @@ def get_weather(location: str) -> dict:
     next_12_hour_visibility = []
     next_12_icons = []
     next_12_phrase = []
-    for dict in next_12_hours: #Turn unpacked hourly data into easy to use lists
+    for dict in next_12_hours: #Unpack hourly data into easy to use lists
         next_12_hour_temp.append(int(dict["temperature_2m"]))
         next_12_hour_precip.append(int(dict["precipitation_probability"]))
         next_12_hour_time.append(dict["date"].strftime("%I:%M %p"))
